@@ -1,0 +1,6 @@
+extends layout
+
+block content
+  h1= title
+  each lift in lifts
+    p #{lift.date.toDateString()} - #{lift.lift} #{lift.sets} X #{lift.reps} X #{lift.weight}

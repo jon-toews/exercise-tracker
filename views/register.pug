@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  form(action="/register", method="post")
+    lable(for="username") Username
+    input(type="text" name="username")
+    input(type="submit", value="Register")
