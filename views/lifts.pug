@@ -1,6 +1,14 @@
 extends layout
 
 block content
-  h1= title
+  h1= `${username}'s ${title}`
+  
   each lift in lifts
-    p #{lift.date.toDateString()} - #{lift.lift} #{lift.sets} X #{lift.reps} X #{lift.weight}
+    .liftcard
+      span.liftcard__date #{lift.date.toDateString()}
+      span.liftcard__type #{lift.lift_type}
+      span.liftcard__sets #{lift.sets} sets
+      span.liftcard__reps #{lift.reps} reps
+      span.liftcard__weight #{lift.weight}lbs
+  
+  a(href="/lifts/add") Add a lift

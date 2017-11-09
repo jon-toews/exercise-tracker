@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 
 const liftSchema = new Schema({
-    lift: {
+    lift_type: {
         type:String,
         required: [true, "You must specify a lift"]
     },

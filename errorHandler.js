@@ -7,7 +7,7 @@ exports.asyncMiddleware = (fn) => {
 }
 
 exports.catchErrors = (fn) => {
-  function wrapper(req, res, next) {
+  return (req, res, next) => {
     return fn(req, res, next).catch(next);
   }
 }

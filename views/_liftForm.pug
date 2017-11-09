@@ -2,11 +2,16 @@ mixin liftForm()
 
   form(action="/lifts" method="post")
     label(for="lift") Lift
-    input(type="text" name="lift")
+    input(type="text" name="lift_type")
     label(for="sets") Sets
     input(type="number" name="sets")
     label(for="reps") Reps
     input(type="number" name="reps")
     label(for="weight") Weight
     input(type="number" name="weight")
+    label(for="date") Date
+    - d = new Date(); d = d.toISOString().substring(0, 10);
+    input(type="date" name="date" value=d)
+
+
     input(type="submit" class="btn-submit")

@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 // const favicon = require("serve-favicon");
-// const logger = require("morgan");
+const logger = require("morgan");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const session = require('express-session');
@@ -26,7 +26,7 @@ app.use(
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-// app.use(logger("dev"));
+app.use(logger("dev"));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -42,6 +42,13 @@ app.use(session({
 }))
 
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use( (req, res, next) => {
+  if (req.session.user) {
+    console.log(req.session);
+  }
+  next();
+})
 
 // routes
 app.use("/", index);

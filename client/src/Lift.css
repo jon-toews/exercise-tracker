@@ -1,0 +1,47 @@
+
+.lift-area {
+  max-width:800px;
+  margin: 1rem auto;
+  text-align: left;
+}
+
+.lift-field {
+  color: cornflowerblue;
+  text-align:left;
+  font-size:14px;
+  margin-left: .5rem;
+}
+
+.lift-value {
+  color: #2a2a2a;
+  font-size: 18px;
+}
+
+.lift-card,
+.lift-form {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) 70px 70px 100px 200px;
+  grid-gap: 8px;
+  padding: 5px;
+}
+
+.lift-form .form-group .form-control {
+  width: 100%;
+  margin-right: 8px;
+}
+
+.lift-card {
+  background: #fff;
+  border-bottom: 1px solid rgba(0,0,0,.2);
+  cursor: pointer; 
+}
+
+.lift-form .btn {
+  margin-right: .5rem;
+}
+
+.add-lift {
+  color: cornflowerblue;
+  padding: 5px;
+  cursor: pointer;
+}

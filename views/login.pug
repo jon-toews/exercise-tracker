@@ -2,7 +2,8 @@ extends layout
 
 block content
   h1= title
-  form(action="/register", method="post")
+  p= message 
+  form(action="/login", method="post")
     lable(for="username") Username
     input(type="text" name="username")
     input(type="submit", value="Register")
