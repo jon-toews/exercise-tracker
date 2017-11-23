@@ -1,35 +1,79 @@
-const User = require("../models/User");
+const passport = require('passport');
+const mongoose = require('mongoose');
+const User = mongoose.model('user');
 
+const { check, validationResult } = require("express-validator/check");
+const { matchedData, sanitize } = require('express-validator/filter');
+
+// express-validator validation
+exports.validateRegister = [
+  check('username')
+    .exists()
+    .custom(value => {
+      return User.findOne({ username: value }).then(user =>{
+        console.log(user);
+        if(!user) {
+          console.log('not user');
+          return true;
+        }
+        throw new Error('username taken');
+      })
+    }),
+  check("email")
+    .isEmail()
+    .withMessage("invalid email address")
+    .trim()
+    .normalizeEmail(),
+  check('password', 'password must be atleast 3 chars')
+    .exists()
+    .isLength({ min: 3}),
+  check('confirm', 'passwords do not match')
+    .exists()
+    .custom((value, { req }) => value === req.body.password)
+]
+
+// fake register
 exports.register = async (req, res) => {
-  const username = req.body.username;
-  const user = await new User({ username }).save();
-  req.session.user = user;
-  res.redirect('/lifts/add');
-}
+  console.log("matched: ", matchedData(req));
+  const errors = validationResult(req);
+  console.log("errors mapped: ", errors.mapped());
 
-exports.registerPage = (req, res) => {
-  res.render("register", { title: "Register" });
-}
-
-exports.loginPage = (req, res) => {
-  res.render("login", { title: "Login" });
-}
-
-exports.login = async (req, res, next) => {
-  const user = await User.findOne({ username: req.body.username });
-  if(!user) {
-    res.render('login', {message: "User does not exist"});
-    return;
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ 
+      success: false, 
+      message: 'validation errors',
+      errors: errors.mapped() });
   }
-  req.session.user = user;
+  const user = new User({username: matchedData(req).username});
 
-  res.redirect('/lifts')
+  User.register(user, matchedData(req).password, (err, user) => {
+    if (err) return res.status(400).json({
+      success: false,
+      message: 'Could not process the form.'
+    });
+    console.log('registering');
+    return res.status(200).json({
+      success: true,
+      message: 'You have succesfully signed up'
+    });
+  })
 }
 
-exports.logout = async (req, res, next) => {
-  if(req.session.user) {
-    req.session.destroy();
+// express-validator validation
+exports.validateLogin = [
+  check('username')
+    .exists()
+    .isLength({min: 1}),
+  check('password', 'password must be atleast 3 chars')
+    .exists()
+    .isLength({ min: 3})
+]
+
+exports.login = (req, res) => {
+  const errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    return res.status(422).json({errors: errors.mapped() });
   }
-  res.redirect('/login');
+  return res.status(200).end();
 }
-
+  

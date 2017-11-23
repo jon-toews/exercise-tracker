@@ -16,9 +16,11 @@ const dotenv = require('dotenv').config({path: __dirname + '/variables.env'})
  * Mongo DB Connection
  */
 const mongoose = require('mongoose');
-
 mongoose.connect(process.env.DATABASE, {useMongoClient:true});
 mongoose.Promise = global.Promise;
+
+// require('./models/User');
+// require('./models/Lift');
 
 /**
  * Get port from environment and store in Express.

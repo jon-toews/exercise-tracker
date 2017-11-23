@@ -101,16 +101,40 @@ export default class LiftContainer extends Component {
 
   render() {
     return (
-      <LiftArea
-        lifts={this.state.lifts}
-        handleSubmit={this.handleSubmit}
-        handleDelete={this.handleDelete}
-        handleEditItem={this.handleEditItem}
-        handleCancelEdit={this.handleCancelEdit}
-        selectedLift={this.state.selectedLift}
-        displayNewLiftForm={this.displayNewLiftForm}
-      />
+      <div>
+        <MenuArea 
+          lifts={this.state.lifts}
+        />
+        <LiftArea
+          lifts={this.state.lifts}
+          handleSubmit={this.handleSubmit}
+          handleDelete={this.handleDelete}
+          handleEditItem={this.handleEditItem}
+          handleCancelEdit={this.handleCancelEdit}
+          selectedLift={this.state.selectedLift}
+          displayNewLiftForm={this.displayNewLiftForm}
+        />
+      </div>
     );
+  }
+}
+
+class MenuArea extends Component {
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    const liftTypes = this.props.lifts.map(x => x.lift_type);
+    const liftSet = new Set(liftTypes);
+    console.log(liftSet);
+
+    return (
+    <ul>
+      Filters and such
+    </ul>
+
+    )
   }
 }
 

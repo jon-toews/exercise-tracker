@@ -1,39 +1,24 @@
 const express = require('express');
 const router = express.Router();
+const userController = require('../controllers/userController');
+const authController = require('../controllers/authController');
+
+// catch async await errors
 const { catchErrors } = require("../errorHandler")
 
-const liftController = require('../controllers/liftController');
-const userController = require('../controllers/userController');
-
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Lift Logger' });
-});
-
-router.get('/lifts/add', liftController.liftForm);
-router.post('/lifts', 
-  catchErrors(liftController.addLift), 
-  liftController.showLifts
+router.post('/testregister', authController.testRegister);
+router.post('/register', 
+  userController.validateRegister, 
+  userController.register
 );
 
-router.get('/lifts', liftController.showLifts);
+router.get('/tokentest', authController.isAuth, authController.postAuth);
+router.get('/asynctokentest', catchErrors(authController.asyncIsAuth), authController.postAuth);
 
-router.get('/api/lifts', liftController.getLifts);
-router.post('/api/lifts', catchErrors(liftController.postLift));
-router.put('/api/lifts', catchErrors(liftController.editLift));
-router.delete('/api/lifts', catchErrors(liftController.deleteLift));
-
-router.get('/register', userController.registerPage)
-router.post('/register', catchErrors(userController.register));
-
-router.get('/login', userController.loginPage) 
-router.post('/login', catchErrors(userController.login));
-
-router.get('/logout', userController.logout);
-
-
-
+router.post('/login',
+  authController.login,
+  authController.issueToken
+);
 
 
 module.exports = router;

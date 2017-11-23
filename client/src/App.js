@@ -1,21 +1,46 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import LiftContainer from './LiftContainer'
+import { BrowserRouter as Router, Route, Link, Redirect, withRouter, Switch } from 'react-router-dom';
+
+import LiftContainer from './LiftContainer';
+import Navigation from './Nav';
+import Register from './Register';
+import Login from './Login'
+import fakeAuth from './auth';
+import axios from 'axios';
+
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Lift Logger</h1>
-        </header>
-        <LiftContainer />
-      </div>
+      <Router>
+        <div>
+          <Navigation />
+          <Switch>
+            <Route path="/register" component={Register} />
+            <Route path="/login" component={Login} />
+            <PrivateRoute path="/lifts" component={LiftContainer} />
+            <Route component={NoMatch} />
+          </Switch>
+        </div>
+      </Router>
     );
   }
 }
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={props => (
+    fakeAuth.isAuthenticated ? (
+      <Component {...props}/>
+    ) : (
+      <Redirect to={{
+        pathname: '/login',
+        state: { from: props.location }
+      }}/>
+    )
+  )}/>
+);
+
+const NoMatch = () => <h3>404 page not found</h3>
 
 
 
