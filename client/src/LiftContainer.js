@@ -3,24 +3,31 @@ import logo from "./logo.svg";
 import "./Lift.css";
 import "./bootstrap.css";
 import axios from "axios";
+import auth from "./auth";
+import Layout from './Layout';
+import Label from 'react-icons/lib/md/label';
 
 export default class LiftContainer extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       lifts: [],
-      user_id: "59f687762d27d05aa197a646",
-      selectedLift: null
+      selectedLift: null,
+      liftFilter: props.liftFilter || '',
     };
   }
 
   componentDidMount() {
+    // set default authentication header
+    axios.defaults.headers.common['Authorization'] = `Bearer ${auth.getToken()}`;
+    
+    const filter = this.state.liftFilter;
+
+    console.log(`/api/lifts/${filter}`)
+    
+    // get user lifts
     axios
-      .get("/api/lifts", {
-        params: {
-          user_id: this.state.user_id
-        }
-      })
+      .get(`/api/lifts/`)
       .then(response => {
         console.log("axios response \n", response);
         this.setState({ lifts: response.data });
@@ -34,10 +41,7 @@ export default class LiftContainer extends Component {
     if (data._id) {
       console.log("updating", data);
       axios
-        .put("/api/lifts", {
-          user_id: this.state.user_id,
-          ...data
-        })
+        .put("/api/lifts", { data })
         .then(response => {
           const lifts = this.state.lifts.slice();
           const updatedLifts = lifts.map(lift => {
@@ -49,12 +53,9 @@ export default class LiftContainer extends Component {
           console.log(error);
         });
     } else {
-      console.log("submitting");
+      console.log("submitting", data);
       axios
-        .post("/api/lifts", {
-          user_id: this.state.user_id,
-          ...data
-        })
+        .post("/api/lifts", { data })
         .then(response => {
           this.setState({
             lifts: this.state.lifts.concat(response.data)
@@ -71,7 +72,6 @@ export default class LiftContainer extends Component {
     axios
       .delete("/api/lifts", {
         params: {
-          user_id: this.state.user_id,
           _id: id
         }
       })
@@ -99,11 +99,23 @@ export default class LiftContainer extends Component {
     this.setState({ selectedLift: 'new' })
   }
 
+  handleFilter = (type) => {
+    console.log("handling filter: ", type)
+    this.setState({ liftFilter: type })
+
+    axios
+      .get(`/api/lifts/${type}`)
+      .then(response => {
+        this.setState({ lifts: response.date })
+      })
+  }
+
   render() {
     return (
-      <div>
+      <Layout>
         <MenuArea 
           lifts={this.state.lifts}
+          handleFilter={this.handleFilter}
         />
         <LiftArea
           lifts={this.state.lifts}
@@ -114,7 +126,7 @@ export default class LiftContainer extends Component {
           selectedLift={this.state.selectedLift}
           displayNewLiftForm={this.displayNewLiftForm}
         />
-      </div>
+      </Layout>
     );
   }
 }
@@ -125,15 +137,27 @@ class MenuArea extends Component {
   }
 
   render() {
+    // create set of lift types
     const liftTypes = this.props.lifts.map(x => x.lift_type);
-    const liftSet = new Set(liftTypes);
-    console.log(liftSet);
+    const uniqueTypes = new Set(liftTypes);
+    console.log("set: ", uniqueTypes);
+
+    // convert to array in order to map to list items
+    const types = [...uniqueTypes].map(type => {
+      return ( 
+        <li className="lift-type-filter" onClick={() => this.props.handleFilter(type)}>
+          <Label /><span>{type}</span>
+        </li>
+      )
+    })
+    
 
     return (
-    <ul>
-      Filters and such
-    </ul>
-
+    <div className="menu-area">
+      <ul>
+        {types}
+      </ul>
+    </div>
     )
   }
 }

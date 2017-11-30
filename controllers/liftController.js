@@ -5,33 +5,30 @@ const Lift = require("../models/Lift");
  */
 
 exports.getLifts = async (req, res) => {
-  console.log(req.query);
+  console.log('getting lifts');
   const lifts = await Lift.find({
-    user_id: req.query.user_id,
+    user_id: req.userId
   });
   
   res.json(lifts);
 }
 
 exports.postLift = async (req, res) => {
-  if (!req.body.user_id) {
+  if (!req.userId) {
     res.json({"error": "no user_id specified"});
     return;
   }
-  
-  // strip _id property for request body
+  // strip null id from request lift object
+  const { _id, ...liftData } = req.body.data;
+  console.log(liftData);
+  const lift = await new Lift({ user_id: req.userId, ...liftData }).save();
+  res.status(201).json(lift);
 
-  const {_id, ...rest} = req.body;
-
-  const lift = await new Lift(rest).save()
-  console.log(lift)
-  res.status(201)
-  res.json(lift);
 }
 
 exports.editLift = async (req, res) => {
   console.log("editing lift", req.body);
-  if (!req.body._id) {
+  if (!req.userId) {
     res.status(204);
     res.json({"error": "no lift id specified"});
     return;
@@ -43,12 +40,6 @@ exports.editLift = async (req, res) => {
 
 exports.deleteLift = async (req, res) => {
   console.log("deleting", req.query);
-  if (!req.query._id) {
-    res.status(204);
-    res.json({"error": "no lift id specified"});
-    return;
-  }
-  // TODO verify user_id
 
   const lift = await Lift.findByIdAndRemove(req.query._id);
   res.send(lift._id)

@@ -7,9 +7,9 @@ const { asyncIsAuth } = require('../controllers/authController');
 
 router.use(asyncIsAuth);
 
-router.get('/api/lifts', liftController.getLifts);
-router.post('/api/lifts', catchErrors(liftController.postLift));
-router.put('/api/lifts', catchErrors(liftController.editLift));
-router.delete('/api/lifts', catchErrors(liftController.deleteLift));
+router.get('/lifts', liftController.getLifts);
+router.post('/lifts', catchErrors(liftController.postLift));
+router.put('/lifts', catchErrors(liftController.editLift));
+router.delete('/lifts', catchErrors(liftController.deleteLift));
 
 module.exports = router;

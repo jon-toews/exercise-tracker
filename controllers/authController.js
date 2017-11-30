@@ -14,14 +14,17 @@ module.exports.asyncIsAuth = async (req, res, next) => {
 
   try {
     const decoded = await jwt.verify(token, process.env.JWT_SECRET, {ignoreExpiration: process.env.NODE_ENV !== 'production'});
+    console.log('decoded: ', decoded);
     const userId = decoded.sub;
-    const id = await User.findById(userId);
-    if(!id) return res.status(401).end();
+    const user = await User.findById(userId);
+    if(!user) return res.status(401).end();
   
     req.userId = userId;
+    req.username = user.username;
     next();
     
   } catch(e) {
+    console.log("auth fail");
     res.status(401).end();
   }
 }
@@ -55,9 +58,9 @@ module.exports.isAuth = (req, res, next) => {
   })
 }
 
-module.exports.postAuth = (req, res) => {
+module.exports.userName = (req, res) => {
   console.log('post auth check');
-  res.status(200).end();
+  res.json({ username: req.username });
 }
 
 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './bootstrap.css';
 import TextField from './TextField';
+import Layout from './Layout';
 import axios from 'axios';
 
 
@@ -54,40 +55,42 @@ export default class Register extends Component {
     {errors.summary && <p className="error-message">{errors.summary}</p>}
 
     return (
-      <form className="form register-form" onSubmit={this.handleSubmit}>
-        <TextField 
-          label="Username"
-          name="username"
-          value={this.state.user.username}
-          onChange={this.handleChange}
-          error={errors.username}
-        />
-        <TextField 
-          label="Email"
-          name="email"
-          type="email"
-          value={this.state.user.email}
-          onChange={this.handleChange}
-          error={errors.email}
-        />
-        <TextField 
-          label="Password"
-          name="password"
-          type="password"
-          value={this.state.user.password}
-          onChange={this.handleChange}
-          error={errors.password}
-        />
-        <TextField 
-          label="Confirm Password"
-          name="confirm"
-          type="password"
-          value={this.state.user.confirm}
-          onChange={this.handleChange}
-          error={errors.confirm}
-        />
-        <button className="btn btn-primary" type="submit" name="submit" onClick={this.handleRegisterSubmit}>Register</button>
-      </form>
+      <Layout>
+        <form className="form register-form" onSubmit={this.handleSubmit}>
+          <TextField 
+            label="Username"
+            name="username"
+            value={this.state.user.username}
+            onChange={this.handleChange}
+            error={errors.username}
+          />
+          <TextField 
+            label="Email"
+            name="email"
+            type="email"
+            value={this.state.user.email}
+            onChange={this.handleChange}
+            error={errors.email}
+          />
+          <TextField 
+            label="Password"
+            name="password"
+            type="password"
+            value={this.state.user.password}
+            onChange={this.handleChange}
+            error={errors.password}
+          />
+          <TextField 
+            label="Confirm Password"
+            name="confirm"
+            type="password"
+            value={this.state.user.confirm}
+            onChange={this.handleChange}
+            error={errors.confirm}
+          />
+          <button className="btn btn-primary" type="submit" name="submit" onClick={this.handleRegisterSubmit}>Register</button>
+        </form>
+      </Layout>
     );
   }
 }

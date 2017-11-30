@@ -12,8 +12,8 @@ router.post('/register',
   userController.register
 );
 
-router.get('/tokentest', authController.isAuth, authController.postAuth);
-router.get('/asynctokentest', catchErrors(authController.asyncIsAuth), authController.postAuth);
+
+router.get('/user', catchErrors(authController.asyncIsAuth), authController.userName);
 
 router.post('/login',
   authController.login,

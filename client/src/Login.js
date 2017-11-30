@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import fakeAuth from './auth';
 import TextField from './TextField';
+import Layout from './Layout';
 import axios from 'axios';
 
 
@@ -30,9 +31,6 @@ class Login extends Component {
   };
 
   login = (e) => {
-    // fakeAuth.authenticate(() => {
-    //   this.setState({ redirectToReferrer: true} )
-    // })
     e.preventDefault()
     console.log("username: ", this.state.user.username);
     console.log("password: ", this.state.user.password);
@@ -41,10 +39,19 @@ class Login extends Component {
       .post('/login', this.state.user)
       .then(response => {
         console.log("login:", response);
-        this.setState({ errors: {} });
+        // set auth token
+        localStorage.setItem('token', response.data.token);
+        this.setState({ 
+          errors: {},
+          redirectToReferrer: true
+        });
       })
       .catch(error => {
-        console.log("login error:", error);
+        console.log("login error:", error.response);
+        if(error.response.status === 401) {
+          this.setState({ errors: { summary: "Invalid username or password"}})
+          return;
+        }
         this.setState({
           errors: error.response.data.errors
         });
@@ -63,24 +70,30 @@ class Login extends Component {
     const errors = this.state.errors;
 
     return (
-      <form className="form register-form" onSubmit={this.login}>
-        <TextField 
-          label="Username"
-          name="username"
-          value={this.state.user.username}
-          onChange={this.handleChange}
-          error={errors.username}
-        />
-        <TextField 
-          label="Password"
-          name="password"
-          type="password"
-          value={this.state.user.password}
-          onChange={this.handleChange}
-          error={errors.password}
-        />
-        <button className="btn btn-primary" type="submit" name="submit">Login</button>
-      </form>
+      <Layout>
+        <form className="form register-form" onSubmit={this.login}>
+          {errors.summary ? 
+            <p className="error-message">{errors.summary}</p> :
+            null
+          }
+          <TextField 
+            label="Username"
+            name="username"
+            value={this.state.user.username}
+            onChange={this.handleChange}
+            error={errors.username}
+          />
+          <TextField 
+            label="Password"
+            name="password"
+            type="password"
+            value={this.state.user.password}
+            onChange={this.handleChange}
+            error={errors.password}
+          />
+          <button className="btn btn-primary" type="submit" name="submit">Login</button>
+        </form>
+      </Layout>
     )
   }
 }
