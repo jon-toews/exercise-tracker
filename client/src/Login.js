@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import fakeAuth from './auth';
 import TextField from './TextField';
-import Layout from './Layout';
+import Navigation from'./Nav';
 import axios from 'axios';
 
 
@@ -32,8 +32,6 @@ class Login extends Component {
 
   login = (e) => {
     e.preventDefault()
-    console.log("username: ", this.state.user.username);
-    console.log("password: ", this.state.user.password);
 
     axios
       .post('/login', this.state.user)
@@ -70,12 +68,9 @@ class Login extends Component {
     const errors = this.state.errors;
 
     return (
-      <Layout>
-        <form className="form register-form" onSubmit={this.login}>
-          {errors.summary ? 
-            <p className="error-message">{errors.summary}</p> :
-            null
-          }
+      <div className='wrapper'>
+        <Navigation />
+        <form className="form login-form" onSubmit={this.login}>
           <TextField 
             label="Username"
             name="username"
@@ -93,7 +88,7 @@ class Login extends Component {
           />
           <button className="btn btn-primary" type="submit" name="submit">Login</button>
         </form>
-      </Layout>
+      </div>
     )
   }
 }

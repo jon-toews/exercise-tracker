@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./Lift.css";
 import "./bootstrap.css";
 import axios from "axios";
 import auth from "./auth";
-import Layout from './Layout';
 import Label from 'react-icons/lib/md/label';
+import Navigation from './Nav';
 
 export default class LiftContainer extends Component {
   constructor(props) {
@@ -106,13 +105,18 @@ export default class LiftContainer extends Component {
     axios
       .get(`/api/lifts/${type}`)
       .then(response => {
-        this.setState({ lifts: response.date })
+        this.setState({ 
+          lifts: response.data,
+          selectedLift: null,
+          liftFilter: type
+        })
       })
   }
 
   render() {
     return (
-      <Layout>
+      <div className="lift-wrapper">
+        <Navigation />
         <MenuArea 
           lifts={this.state.lifts}
           handleFilter={this.handleFilter}
@@ -126,7 +130,7 @@ export default class LiftContainer extends Component {
           selectedLift={this.state.selectedLift}
           displayNewLiftForm={this.displayNewLiftForm}
         />
-      </Layout>
+      </div>
     );
   }
 }

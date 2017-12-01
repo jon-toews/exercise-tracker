@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect, withRouter, Switch } from 'react-router-dom';
-
 import LiftContainer from './LiftContainer';
 import Navigation from './Nav';
 import Register from './Register';

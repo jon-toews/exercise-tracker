@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './bootstrap.css';
 import TextField from './TextField';
-import Layout from './Layout';
+import Navigation from './Nav';
 import axios from 'axios';
 
 
@@ -55,7 +55,8 @@ export default class Register extends Component {
     {errors.summary && <p className="error-message">{errors.summary}</p>}
 
     return (
-      <Layout>
+      <div className="wrapper">
+        <Navigation />
         <form className="form register-form" onSubmit={this.handleSubmit}>
           <TextField 
             label="Username"
@@ -90,7 +91,7 @@ export default class Register extends Component {
           />
           <button className="btn btn-primary" type="submit" name="submit" onClick={this.handleRegisterSubmit}>Register</button>
         </form>
-      </Layout>
+      </div>
     );
   }
 }

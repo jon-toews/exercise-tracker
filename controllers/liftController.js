@@ -5,11 +5,21 @@ const Lift = require("../models/Lift");
  */
 
 exports.getLifts = async (req, res) => {
-  console.log('getting lifts');
   const lifts = await Lift.find({
     user_id: req.userId
   });
   
+  res.json(lifts);
+}
+
+exports.getLiftType = async (req, res) => {
+  console.log("lift type: ", req.params);
+
+  const lifts = await Lift.find({ 
+    user_id: req.userId,
+    lift_type: req.params.type
+  })
+
   res.json(lifts);
 }
 

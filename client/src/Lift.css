@@ -1,3 +1,29 @@
+/**************************************************************************
+    APP LAYOUT
+**************************************************************************/
+
+.lift-wrapper {
+  display: grid;
+  grid-template-columns: minmax(1fr) minmax(120px, 200px) minmax(600px, 800px) 1fr;
+  grid-template-rows: auto 1fr;
+  /* grid-gap: 2px; */
+  min-height: 100vh;
+  background: #f7f7f7;
+}
+nav {
+  grid-column: 2/4;
+  grid-row: 1;
+  z-index: 1;
+}
+.lift-area {
+  grid-column: 3/4;
+  grid-row: 2;
+}
+.menu-area {
+  grid-column: 2/3;
+  grid-row:2
+}
+
 
 .menu-area {
   background: #f7f7f7;
@@ -63,7 +89,7 @@
 }
 
 .add-lift {
-  color: cornflowerblue;
+  color: #3f50b5;
   padding: 5px;
   cursor: pointer;
 }

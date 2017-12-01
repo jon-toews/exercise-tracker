@@ -69,7 +69,7 @@ module.exports.login = passport.authenticate('local', { session: false })
 
 module.exports.issueToken = (req, res) => {
   console.log('post login');
-
+  console.log(process.env.JWT_SECRET);
   // payload with subject and expiry
   const payload = { 
     sub: req.user._id,

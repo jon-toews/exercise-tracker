@@ -7,7 +7,6 @@ const bodyParser = require("body-parser");
 const session = require('express-session');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
-const sassMiddleware = require("node-sass-middleware");
 const validator = require("express-validator");
 const passport = require('passport');
 require('./passport.js');
@@ -48,7 +47,6 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
-  console.log("error handler", err);
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
