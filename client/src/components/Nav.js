@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
-import {Link, withRouter} from 'react-router-dom';
-
+import {Link} from 'react-router-dom';
 import './Navigation.css'
-import auth from './auth';
+import auth from '../utils/auth';
 
 
 
 class Navigation extends Component {
-
-
-
   render() {
     const authStatus = auth.isUserAuthenticated();
     console.log('rending nav. Auth: ', authStatus)
@@ -34,11 +30,5 @@ class Navigation extends Component {
     );
   }
 }
-
-const LogoutButton = withRouter(({ history }) => {
-  localStorage.removeItem('token');
-  return <button className="btn btn-default" onClick={() => { history.push('/')}}>Logout</button>
-})
-
 
 export default Navigation;

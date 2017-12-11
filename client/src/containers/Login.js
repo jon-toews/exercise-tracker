@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
-import fakeAuth from './auth';
-import TextField from './TextField';
-import Navigation from'./Nav';
+import { Redirect } from 'react-router-dom';
+import TextField from '../components/TextField';
+import Navigation from'../components/Nav';
 import axios from 'axios';
 
 

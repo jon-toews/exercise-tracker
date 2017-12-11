@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import './bootstrap.css';
-import TextField from './TextField';
-import Navigation from './Nav';
+import '../bootstrap.css';
+import TextField from '../components/TextField';
+import Navigation from '../components/Nav';
 import axios from 'axios';
 
 
@@ -33,8 +33,6 @@ export default class Register extends Component {
 
   handleRegisterSubmit = event => {
     event.preventDefault();
-    
-
       axios.post('/register', this.state.user)
       .then(response => {
         if(response.status === 200) {
@@ -51,8 +49,6 @@ export default class Register extends Component {
 
   render() {
     const errors = this.state.errors;
-
-    {errors.summary && <p className="error-message">{errors.summary}</p>}
 
     return (
       <div className="wrapper">
@@ -92,6 +88,6 @@ export default class Register extends Component {
           <button className="btn btn-primary" type="submit" name="submit" onClick={this.handleRegisterSubmit}>Register</button>
         </form>
       </div>
-    );
+    )
   }
 }

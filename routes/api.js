@@ -8,9 +8,13 @@ const { asyncIsAuth } = require('../controllers/authController');
 router.use(asyncIsAuth);
 
 router.get('/lifts', catchErrors(liftController.getLifts));
-router.get('/lifts/:type', catchErrors(liftController.getLiftType));
+
 router.post('/lifts', catchErrors(liftController.postLift));
 router.put('/lifts', catchErrors(liftController.editLift));
 router.delete('/lifts', catchErrors(liftController.deleteLift));
+
+router.get('/lift-types', catchErrors(liftController.distinctLifts));
+
+// router.get('/lifts/:type', catchErrors(liftController.getLiftType));
 
 module.exports = router;

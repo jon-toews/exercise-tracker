@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link, Redirect, withRouter, Switch } from 'react-router-dom';
-import LiftContainer from './LiftContainer';
-import Navigation from './Nav';
-import Register from './Register';
-import Login from './Login';
-import Layout from './Layout';
-import auth from './auth';
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+import LiftContainer from 'containers/LiftContainer';
+import Register from 'containers/Register';
+import Login from 'containers/Login';
+import auth from 'utils/auth';
 import axios from 'axios';
+
+import Navigation from 'components/Nav';
 
 
 class App extends Component {
@@ -43,7 +43,9 @@ class App extends Component {
             <Route exact={true} path="/" component={Welcome} /> 
             <Route path="/register" component={Register} />
             <Route path="/login" component={Login} />
-            <PrivateRoute path="/lifts" component={LiftContainer} />
+
+            <PrivateRoute path="/lifts/:type" component={LiftContainer} />
+            <PrivateRoute path="/lifts/" component={LiftContainer} />
             <Route component={NoMatch} />
           </Switch>
       </Router>
@@ -53,9 +55,10 @@ class App extends Component {
 
 const Welcome = () => {
   return (
-    <Layout>
+    <div>
+      <Navigation />
       <h1>Welcome to Lift Logger</h1>
-    </Layout>
+    </div>
   )
 }
 
