@@ -1,4 +1,5 @@
 const Lift = require("../models/Lift")
+const moment = require('moment')
 
 exports.getLifts = async (req, res) => {
 
@@ -11,8 +12,18 @@ exports.getLifts = async (req, res) => {
   }
 
   if (req.query.from || req.query.to) {
-    const from = req.query.from ? { "$gte" : new Date(req.query.from) } : null
-    const to = req.query.to ? { "$lte" : new Date(req.query.to) } : null
+    let fromDate = null
+    let toDate = null
+
+    if (req.query.from && moment(req.query.from).isValid()) {
+      fromDate = moment(req.query.from)
+    }
+    if (req.query.to && moment(req.query.to).isValid()) {
+      toDate = moment(req.query.to).endOf('day')
+    }
+
+    const from = fromDate ? { "$gte" : fromDate } : null
+    const to = toDate ? { "$lte" : toDate } : null
     
     const dateRange = Object.assign({}, from, to)
 
