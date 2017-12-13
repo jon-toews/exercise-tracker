@@ -1,7 +1,52 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 
+import styled from 'styled-components'
+
+const LiftCard = styled.div`
+  display: grid;
+  grid-template-columns: minmax(160px, 1fr) 80px 80px 100px 160px;
+  grid-gap: 8px;
+  padding: 5px;
+`
+const LiftField = styled.div`
+  color: cornflowerblue;
+  text-align: left;
+  background: #fff;
+`
+const LiftValue = styled.span`
+  color: #2a2a2a;
+  font-size: 16px;
+`
+
+
 const LiftItem = props => {
+  const dateString = new Date(props.date).toLocaleDateString();
+  return (
+    <LiftCard onClick={() => props.handleEditItem(props._id)}>
+      <LiftField>
+        <LiftValue>{props.lift_type}</LiftValue>
+      </LiftField>
+      <LiftField>
+        Sets: <LiftValue>{props.sets}</LiftValue>
+      </LiftField>
+      <LiftField>
+        Reps: <LiftValue>{props.reps}</LiftValue>
+      </LiftField>
+      <LiftField>
+        Weight: <LiftValue>{props.weight}</LiftValue>
+      </LiftField>
+      {props.shouldShowDate ? 
+        <LiftField>
+          Date: <LiftValue>{dateString}</LiftValue>
+        </LiftField> :
+        null
+      }
+    </LiftCard>
+  )
+}
+
+const LiftItemz = props => {
   const dateString = new Date(props.date).toLocaleDateString();
   return (
     <div className="lift-card" onClick={() => props.handleEditItem(props._id)}>
@@ -24,8 +69,8 @@ const LiftItem = props => {
         null
       }
     </div>
-  );
-};
+  )
+}
 
 LiftItem.propTypes = {
   lift_type: PropTypes.String,
@@ -36,4 +81,4 @@ LiftItem.propTypes = {
   shouldShowDate: PropTypes.bool
 }
 
-export default LiftItem;
+export default LiftItem
