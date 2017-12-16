@@ -1,9 +1,12 @@
 import React, {Component} from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import DatePicker from 'react-datepicker'
+import Button from 'components/Button'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import moment from 'moment'
+import styled from 'styled-components'
+
 
 class LiftForm extends Component {
   constructor(props) {
@@ -49,77 +52,113 @@ class LiftForm extends Component {
        transitionLeaveTimeout={2000}
        transitionAppear={true}
        transitionAppearTimeout={5000}>
-        <form className="form-inline lift-form" onSubmit={this.handleSubmit}>
-          <div className="form-group">
-            <label className="sr-only" for="lift_type" />
-            <input
-              name="lift_type"
-              type="text"
-              className="form-control"
-              placeholder="Lift"
-              onChange={this.handleInputChange}
-              value={this.state.lift_type}
-            />
-          </div>
-          <div className="form-group">
-            <label className="sr-only" for="sets" />
-            <input
-              name="sets"
-              type="number"
-              className="form-control"
-              placeholder="Sets"
-              onChange={this.handleInputChange}
-              value={this.state.sets}
-            />
-          </div>
-          <div className="form-group">
-            <label className="sr-only" for="reps" />
-            <input
-              name="reps"
-              type="number"
-              className="form-control"
-              placeholder="Reps"
-              onChange={this.handleInputChange}
-              value={this.state.reps}
-            />
-          </div>
-          <div className="form-group">
-            <label className="sr-only" for="weight" />
-            <input
-              name="weight"
-              type="number"
-              className="form-control"
-              placeholder="Weight"
-              onChange={this.handleInputChange}
-              value={this.state.weight}
-            />
-          </div>
-          <div className="form-group">
-            <DatePicker
-              className="form-control date-picker"
-              selected={this.state.date}
-              onChange={this.handleDateChange} 
-            />
-          </div>
-          <div className="form-group form-buttons">
-            <button type="submit" className="btn btn-primary">
+        <LiftFormLayout onSubmit={this.handleSubmit}>
+          <StyledInput
+            name="lift_type"
+            type="text"
+            placeholder="Lift"
+            onChange={this.handleInputChange}
+            value={this.state.lift_type}
+          />
+          <StyledInput
+            name="sets"
+            type="number"
+            placeholder="Sets"
+            onChange={this.handleInputChange}
+            value={this.state.sets}
+          />
+          <StyledInput
+            name="reps"
+            type="number"
+            placeholder="Reps"
+            onChange={this.handleInputChange}
+            value={this.state.reps}
+          />
+          <StyledInput
+            name="weight"
+            type="number"
+            placeholder="Weight"
+            onChange={this.handleInputChange}
+            value={this.state.weight}
+          />
+          <StyledDatePicker
+            className="date-picker"
+            selected={this.state.date}
+            onChange={this.handleDateChange} 
+          />
+          <FormButtonGroup>
+            <Button primary type="submit">
               {buttonText}
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
-              className="btn btn-default"
+              className=""
               onClick={() => this.props.handleCancelEdit(this.state._id)}
             >
               Cancel
-            </button>
+            </Button>
             {this.state._id ? (
-              <button type="button" className="btn btn-default" onClick={() => this.props.handleDelete(this.state._id)}>Delete</button>
+              <Button type="button" onClick={() => this.props.handleDelete(this.state._id)}>Delete</Button>
             ) : null}
-          </div>
-        </form>
+          </FormButtonGroup>
+        </LiftFormLayout>
       </ReactCSSTransitionGroup>
     )
   }
 }
+
+const FormButtonGroup = styled.div`
+  grid-row: 2;
+  grid-column: 1/6;
+  justify-self: start;
+  
+  & > button {
+    margin-right: .25em;
+  }
+`
+const LiftFormLayout = styled.form`
+  display: grid;
+  grid-template-columns: minmax(160px, 1fr) 80px 80px 100px 120px;
+  grid-column-gap: 2px;
+  grid-row-gap:8px;
+  padding:8px 4px;
+  background: #f6f6f6;
+`
+
+const StyledDatePicker = styled(DatePicker)`
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.4;
+  width: 100%;
+  color: #555;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 1px rgba(0,0,0, .075);
+
+  &:focus {
+    border-color: #C5CAE9;
+    box-shadow: inset 0 1px 1px rgba(0,0,0, .075), 
+      0 0 8px rgba(159,168,218 ,.6);
+  }
+`
+
+const StyledInput = styled.input`
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.4;
+  width: 100%;
+  color: #555;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 1px rgba(0,0,0, .075);
+
+  &:focus {
+    border-color: #C5CAE9;
+    box-shadow: inset 0 1px 1px rgba(0,0,0, .075), 
+      0 0 8px rgba(159,168,218 ,.6);
+  }
+`
 
 export default LiftForm

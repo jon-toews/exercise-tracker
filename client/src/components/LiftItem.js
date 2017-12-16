@@ -8,11 +8,21 @@ const LiftCard = styled.div`
   grid-template-columns: minmax(160px, 1fr) 80px 80px 100px 160px;
   grid-gap: 8px;
   padding: 5px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  background: #fff;
+
+  &:hover {
+    box-sizing:border-box;
+    transition: 50ms transform linear;
+    /* border: 1px solid rgba(0,0,0,.1); */
+    background: #f5f5f5;
+    /* box-shadow: 1px 1px 2px rgba(0,0,0,.1); */
+  }
 `
 const LiftField = styled.div`
   color: cornflowerblue;
   text-align: left;
-  background: #fff;
 `
 const LiftValue = styled.span`
   color: #2a2a2a;
@@ -43,32 +53,6 @@ const LiftItem = props => {
         null
       }
     </LiftCard>
-  )
-}
-
-const LiftItemz = props => {
-  const dateString = new Date(props.date).toLocaleDateString();
-  return (
-    <div className="lift-card" onClick={() => props.handleEditItem(props._id)}>
-      <div className="lift-field">
-        <span className="lift-value">{props.lift_type}</span>
-      </div>
-      <div className="lift-field">
-        Sets: <span className="lift-value">{props.sets}</span>
-      </div>
-      <div className="lift-field">
-        Reps: <span className="lift-value">{props.reps}</span>
-      </div>
-      <div className="lift-field">
-        Weight: <span className="lift-value">{props.weight} </span>
-      </div>
-      {props.shouldShowDate ? 
-        <div className="lift-field">
-          Date: <span className="lift-value">{dateString}</span>
-        </div> :
-        null
-      }
-    </div>
   )
 }
 
