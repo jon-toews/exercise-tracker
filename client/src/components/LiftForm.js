@@ -90,16 +90,13 @@ class LiftForm extends Component {
             <Button primary type="submit">
               {buttonText}
             </Button>
-            <Button
-              type="button"
-              className=""
-              onClick={() => this.props.handleCancelEdit(this.state._id)}
-            >
-              Cancel
-            </Button>
-            {this.state._id ? (
-              <Button type="button" onClick={() => this.props.handleDelete(this.state._id)}>Delete</Button>
-            ) : null}
+            {this.state._id 
+              ? <Button type="button" onClick={() => this.props.handleCancelEdit(this.state._id)}>Cancel</Button>
+              : null
+            }
+            {this.state._id 
+              ? <Button type="button" onClick={() => this.props.handleDelete(this.state._id)}>Delete</Button>
+              : null}
           </FormButtonGroup>
         </LiftFormLayout>
       </ReactCSSTransitionGroup>
@@ -142,7 +139,6 @@ const StyledDatePicker = styled(DatePicker)`
       0 0 8px rgba(159,168,218 ,.6);
   }
 `
-
 const StyledInput = styled.input`
   padding: 6px 12px;
   font-size: 14px;

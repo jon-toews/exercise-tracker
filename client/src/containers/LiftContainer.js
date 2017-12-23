@@ -1,13 +1,16 @@
 import React, { Component } from "react"
-import "./Lift.css"
-import "bootstrap.css"
 import {getLifts, addLift, editLift, deleteLift} from 'api'
+
+import styled from 'styled-components'
 
 import Navigation from 'components/Nav'
 import LiftItem from 'components/LiftItem'
 import LiftForm from 'components/LiftForm'
 import NewLiftForm from 'components/NewLiftForm'
 import Menu from 'containers/Menu'
+
+import moment from 'moment'
+import { json } from "body-parser";
 
 
 export default class LiftContainer extends Component {
@@ -16,11 +19,9 @@ export default class LiftContainer extends Component {
 
     const type = this.props.match.params.type
 
-    console.log("constructing: type", type)
     this.state = {
       lifts: [],
       selectedLift: null,
-      
     }
   }
 
@@ -29,6 +30,7 @@ export default class LiftContainer extends Component {
     // get user lifts
     getLifts({lift_type: this.state.liftFilter})
       .then(response => {
+        console.log(JSON.stringify(response.data))
         this.setState({ lifts: response.data })
       })
       .catch(error => {
@@ -97,7 +99,7 @@ export default class LiftContainer extends Component {
 
   render() {
     return (
-      <div className="lift-wrapper">
+      <AppWrapper>
         <Navigation />
         <Menu liftType={this.state.liftFilter} handleFilter={this.handleFilter} />
         <LiftArea
@@ -109,10 +111,20 @@ export default class LiftContainer extends Component {
           selectedLift={this.state.selectedLift}
           displayNewLiftForm={this.displayNewLiftForm}
         />
-      </div>
+      </AppWrapper>
     )
   }
 }
+
+const AppWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr minmax(160px, 200px) minmax(600px, 800px) 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:  
+    ". header header ."
+    ". aside main .";
+  min-height: 100vh;
+`
 
 class LiftArea1 extends Component {
   render() {
@@ -181,18 +193,22 @@ class LiftArea extends Component {
     const lifts = this.props.lifts.slice()
 
     const liftsByDate = lifts
-      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      // .sort((a, b) => moment(b.date) - moment(a.date))
       .reduce((dates, lift) => {
-        dates[lift.date] = dates[lift.date] || []
-        dates[lift.date].push(lift)
+        const date = moment(lift.date).format('YYYYMMDD');
+        dates[date] = dates[date] || []
+        dates[date].push(lift)
+        console.log("dates: ", dates)
         return dates;
       }, {})
 
+
     const DateCards = Object.keys(liftsByDate)
+      .sort((a,b) => b - a)
       .map(date => {
         return (
           <div>
-            <h3>{date.slice(0, 10)} </h3>
+            <h3>{moment(date).format("ddd, MMM Do YYYY")} </h3>
             {this.renderLiftCards(liftsByDate[date])}
           </div>
         )
@@ -200,19 +216,26 @@ class LiftArea extends Component {
 
 
     return ( 
-      <div className="lift-area">
-        <div className="add-lift" onClick={this.props.displayNewLiftForm}></div>
-          <NewLiftForm 
+      <LiftAreaWrapper>
+          <LiftForm 
             handleSubmit={this.props.handleSubmit}
             handleDelete={this.props.handleDelete}
             handleCancelEdit={this.props.handleCancelEdit}
           />
           {DateCards}
-        
-      </div>
+      </LiftAreaWrapper>
     ) 
   }
 }
+
+const LiftAreaWrapper = styled.div`
+  grid-area: main;
+  max-width: 900px;
+  padding: 1rem;
+  text-align: left;
+  background: #fff;
+  box-shadow: 1px 1px 2px rgba(0,0,0,.075);
+`
 
 
 

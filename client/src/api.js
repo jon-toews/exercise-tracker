@@ -1,11 +1,6 @@
 import axios from 'axios';
 import auth from 'utils/auth';
 
-// set default authentication header
-axios.defaults.headers.common['Authorization'] = `Bearer ${auth.getToken()}`
-
-
-
 export function getLiftTypes() {
   axios.defaults.headers.common['Authorization'] = `Bearer ${auth.getToken()}`  
   return axios.get('/api/lift-types')
