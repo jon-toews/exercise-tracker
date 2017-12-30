@@ -8,15 +8,15 @@ import moment from 'moment'
 import styled from 'styled-components'
 
 
-class LiftForm extends Component {
+class LiftCardEdit extends Component {
   constructor(props) {
     super(props)
     this.state = {
       _id: this.props._id || null,
-      lift_type: this.props.lift_type || null,
-      sets: this.props.sets || null,
-      reps: this.props.reps || null,
-      weight: this.props.weight || null,
+      lift_type: this.props.lift_type || '',
+      sets: this.props.sets || '',
+      reps: this.props.reps || '',
+      weight: this.props.weight || '',
       date: moment(this.props.date) || moment()
     }
   }
@@ -37,13 +37,26 @@ class LiftForm extends Component {
 
   handleSubmit = event => {
     event.preventDefault()
-    this.props.handleSubmit(this.state)
+
+    const liftId = this.state._id
+
+    if (liftId) {
+      console.log("dispatching lift edit")
+      this.props.onLiftEdit(this.state, liftId)
+      this.props.onLiftDeselect()
+    } else {
+      console.log("dispatching lift submit")      
+      this.props.onLiftSubmit(this.state)
+    }
   }
 
   render() {
     const buttonText = this.state._id ? "Update" : "Add"
-    console.log(this.state.date)
-    const dateString = new Date(this.state.date).toISOString().slice(0, 10)
+
+    const {
+      onLiftDelete,
+      onLiftDeselect
+    } = this.props
 
     return (
       <ReactCSSTransitionGroup
@@ -52,7 +65,7 @@ class LiftForm extends Component {
        transitionLeaveTimeout={2000}
        transitionAppear={true}
        transitionAppearTimeout={5000}>
-        <LiftFormLayout onSubmit={this.handleSubmit}>
+        <LiftCardLayout onSubmit={this.handleSubmit}>
           <StyledInput
             name="lift_type"
             type="text"
@@ -77,6 +90,7 @@ class LiftForm extends Component {
           <StyledInput
             name="weight"
             type="number"
+            step="5"
             placeholder="Weight"
             onChange={this.handleInputChange}
             value={this.state.weight}
@@ -91,14 +105,14 @@ class LiftForm extends Component {
               {buttonText}
             </Button>
             {this.state._id 
-              ? <Button type="button" onClick={() => this.props.handleCancelEdit(this.state._id)}>Cancel</Button>
-              : null
+              ? <Button type="button" onClick={() => onLiftDeselect(this.state._id)}>Cancel</Button>
+              : ''
             }
             {this.state._id 
-              ? <Button type="button" onClick={() => this.props.handleDelete(this.state._id)}>Delete</Button>
-              : null}
+              ? <Button type="button" onClick={() => onLiftDelete(this.state._id)}>Delete</Button>
+              : ''}
           </FormButtonGroup>
-        </LiftFormLayout>
+        </LiftCardLayout>
       </ReactCSSTransitionGroup>
     )
   }
@@ -113,7 +127,7 @@ const FormButtonGroup = styled.div`
     margin-right: .25em;
   }
 `
-const LiftFormLayout = styled.form`
+const LiftCardLayout = styled.form`
   display: grid;
   grid-template-columns: minmax(160px, 1fr) 80px 80px 100px 120px;
   grid-column-gap: 2px;
@@ -157,4 +171,4 @@ const StyledInput = styled.input`
   }
 `
 
-export default LiftForm
+export default LiftCardEdit

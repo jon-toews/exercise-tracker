@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import auth from '../utils/auth';
-
 import styled from 'styled-components'
 
 
@@ -73,7 +72,5 @@ const NavLinkBrand = NavLink.extend`
     border-bottom: 4px solid transparent;
   }
 `
-
-
 
 export default Navigation;

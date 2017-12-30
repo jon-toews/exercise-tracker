@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import '../bootstrap.css';
 import TextField from '../components/TextField';
 import Navigation from '../components/Nav';
 import axios from 'axios';
