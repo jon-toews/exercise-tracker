@@ -41,11 +41,9 @@ class LiftCardEdit extends Component {
     const liftId = this.state._id
 
     if (liftId) {
-      console.log("dispatching lift edit")
       this.props.onLiftEdit(this.state, liftId)
       this.props.onLiftDeselect()
     } else {
-      console.log("dispatching lift submit")      
       this.props.onLiftSubmit(this.state)
     }
   }
@@ -105,7 +103,7 @@ class LiftCardEdit extends Component {
               {buttonText}
             </Button>
             {this.state._id 
-              ? <Button type="button" onClick={() => onLiftDeselect(this.state._id)}>Cancel</Button>
+              ? <Button type="button" onClick={() => onLiftDeselect()}>Cancel</Button>
               : ''
             }
             {this.state._id 

@@ -11,7 +11,7 @@ const LiftArea = ({
   onLiftEdit,
   onLiftDelete,
   onLiftSelect,
-  onLiftDeselect
+  onLiftDeselect,
 }) => {
 
   return ( 
