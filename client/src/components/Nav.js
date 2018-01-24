@@ -7,7 +7,6 @@ import styled from 'styled-components'
 class Navigation extends Component {
   render() {
     const authStatus = auth.isUserAuthenticated();
-    console.log('rending nav. Auth: ', authStatus)
 
     return (
       <Nav>

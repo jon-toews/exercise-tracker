@@ -40,7 +40,6 @@ const Welcome = () => {
 }
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
-  console.log("Private Route", rest);
   return(
     <Route {...rest} render={props => (
       auth.isUserAuthenticated() ? (
