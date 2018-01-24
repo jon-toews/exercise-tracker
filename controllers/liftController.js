@@ -32,6 +32,7 @@ exports.getLifts = async (req, res) => {
   
   console.log("get lift query", query);
   const lifts = await Lift.find(query)
+  console.log('results:', lifts)
   
   res.json(lifts)
 }
@@ -72,14 +73,15 @@ exports.postLift = async (req, res) => {
 }
 
 exports.editLift = async (req, res) => {
-  console.log("editing lift", req.body)
   if (!req.userId) {
     res.status(204)
     res.json({"error": "no lift id specified"})
     return
   }
+  const { _id, ...liftData } = req.body.data
 
-  const lift = await Lift.findByIdAndUpdate(req.body._id, req.body, {new:true})
+  const lift = await Lift.findByIdAndUpdate(_id, liftData, {new:true})
+  console.log('post update lift', lift)
   res.json(lift)
 }
 
@@ -87,5 +89,5 @@ exports.deleteLift = async (req, res) => {
   console.log("deleting", req.query)
 
   const lift = await Lift.findByIdAndRemove(req.query._id)
-  res.send(lift._id)
+  res.send(lift)
 }
