@@ -1,53 +1,17 @@
 import React from 'react'
 import LiftCard from 'components/LiftCard'
 import LiftCardEdit from 'components/LiftCardEdit'
+import Lift from 'containers/Lift'
 
 import styled from 'styled-components'
 
-const LiftArea = ({
-  lifts,
-  selectedLift,
-  onLiftSubmit,
-  onLiftEdit,
-  onLiftDelete,
-  onLiftSelect,
-  onLiftDeselect,
-}) => {
-
+const LiftArea = ({ ids }) => {
+  console.log(ids)
   return ( 
     <LiftAreaWrapper>
-        <LiftCardEdit
-          key={"new"}
-          onLiftSubmit={onLiftSubmit}
-          onLiftEdit={onLiftEdit}
-          onLiftDelete={onLiftDelete}
-          onLiftDeselect={onLiftDeselect}
-        />
-        {renderLiftCards(lifts)}
+        {ids.map(id => <Lift id={id} />)}
     </LiftAreaWrapper>
   ) 
-  
-  function renderLiftCards(lifts) {
-    return lifts.map(lift => {
-      return selectedLift !== lift._id ? (
-        <LiftCard
-          key={lift._id}
-          handleEditItem={onLiftSelect}
-          shouldShowDate={true}
-          {...lift}
-        />
-      ) : (
-        <LiftCardEdit
-          key={lift._id}
-          onLiftSubmit={onLiftSubmit}
-          onLiftEdit={onLiftEdit}
-          onLiftDelete={onLiftDelete}
-          onLiftDeselect={onLiftDeselect}
-          {...lift}
-        />
-      )
-    })
-  }
 }
   
 const LiftAreaWrapper = styled.div`
