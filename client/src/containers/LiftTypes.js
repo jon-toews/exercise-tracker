@@ -1,21 +1,31 @@
+import React, { Component } from 'react'
 import { connect } from "react-redux"
 import FilterLinks from "components/FilterLinks"
+import { getLiftTypes }  from 'reducers'
+import { fetchLiftTypes } from 'actions'
 
-const getLiftTypes = lifts => {
-  return lifts.reduce((types, lift) => {
-    if (types.indexOf(lift.lift_type) === -1) {
-      types.push(lift.lift_type)
-    }
-    return types
-  }, [])
+class LiftTypes extends Component {
+
+  render() {
+    return <FilterLinks {...this.props} />
+  }
+
+  componentDidMount() {
+    console.log("lift types mount")
+    this.props.fetchLiftTypes()
+  }
 }
 
 const mapStateToProps = state => {
   return {
-    types: getLiftTypes(state.lifts)
+    types: getLiftTypes(state)
   }
 }
 
-export default connect(mapStateToProps, null, null, { pure: false })(
-  FilterLinks
-)
+const mapDispatchToProps = dispatch => ({
+  fetchLiftTypes: () => dispatch(fetchLiftTypes())
+})
+
+LiftTypes = connect(mapStateToProps, mapDispatchToProps)(LiftTypes)
+
+export default LiftTypes
