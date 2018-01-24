@@ -19,7 +19,7 @@ const LiftListByDate = ({
     .sort((a,b) => b - a)
     .map(date => {
       return (
-        <div>
+        <div key={date}>
           <h3>{moment(date).format("ddd, MMM Do YYYY")} </h3>
           {renderLiftCards(liftsByDate[date])}
         </div>
