@@ -5,11 +5,6 @@ import logger from 'redux-logger'
 import promise from 'redux-promise'
 import thunk from 'redux-thunk'
 
-const applyMiddlewareToStore = (store, middlewares) => {
-  middlewares.slice().reverse().forEach(middleware => {
-    store.dispatch = middleware(store)(store.dispatch)
-  })
-}
 
 const configureStore = () => {
   const middlewares = [thunk, logger]
@@ -22,11 +17,7 @@ const configureStore = () => {
     )
   )
 
-  store.subscribe(() => {
-    saveState({
-      lifts: store.getState().lifts
-    })
-  })
+  
 
   return store
 }
