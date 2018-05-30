@@ -3,26 +3,28 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "axios": "^0.17.0",
-    "lodash": "^4.17.4",
-    "lodash.merge": "^4.6.0",
+    "@material-ui/core": "^1.0.0",
+    "axios": "^0.17.1",
+    "lodash": "^4.17.10",
+    "lodash.merge": "^4.6.1",
     "lodash.omit": "^4.5.0",
-    "moment": "^2.19.3",
+    "lodash.union": "^4.6.0",
+    "moment": "^2.22.1",
     "node-uuid": "^1.4.8",
     "normalizr": "^3.2.4",
-    "react": "^16.0.0",
+    "react": "^16.4.0",
     "react-addons-css-transition-group": "^15.6.2",
     "react-datepicker": "^0.61.0",
-    "react-dom": "^16.0.0",
+    "react-dom": "^16.4.0",
     "react-icons": "^2.2.7",
-    "react-redux": "^5.0.6",
+    "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.16",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
     "redux-promise": "^0.5.3",
     "redux-thunk": "^2.2.0",
-    "styled-components": "^2.2.4"
+    "styled-components": "^2.4.0"
   },
   "scripts": {
     "start": "NODE_PATH=src react-scripts start",
@@ -34,8 +36,8 @@
   },
   "proxy": "http://localhost:3001",
   "devDependencies": {
-    "@storybook/react": "^3.2.17",
-    "@storybook/addon-actions": "^3.2.17",
-    "@storybook/addon-links": "^3.2.17"
+    "@storybook/addon-actions": "^3.4.5",
+    "@storybook/addon-links": "^3.4.5",
+    "@storybook/react": "^3.4.5"
   }
 }

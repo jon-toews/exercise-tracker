@@ -7,8 +7,9 @@ import Register from 'containers/Register';
 import Login from 'containers/Login';
 import auth from 'utils/auth';
 import Navigation from 'components/Nav';
+import Workout from 'components/Workout';
 
-import  '../bootstrap.css'
+
 
 
 const Root = ({ store }) => (
@@ -18,9 +19,9 @@ const Root = ({ store }) => (
         <Route exact={true} path="/" component={Welcome} /> 
         <Route path="/register" component={Register} />
         <Route path="/login" component={Login} />
+        <Route path="/workout" component={Workout} />
 
-        <PrivateRoute path="/lifts/type/:filter" component={LiftApp} />
-        <PrivateRoute path="/lifts/" component={LiftApp}  />
+
         <Route component={NoMatch} />
       </Switch>
     </Router>
