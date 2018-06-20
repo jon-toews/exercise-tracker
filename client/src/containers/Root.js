@@ -9,10 +9,18 @@ import auth from 'utils/auth';
 import Navigation from 'components/Nav';
 import Workout from 'components/Workout';
 
+import JssProvider from 'react-jss/lib/JssProvider';
+import { create } from 'jss';
+import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
 
+const generateClassName = createGenerateClassName();
+const jss = create(jssPreset());
+// We define a custom insertion point that JSS will look for injecting the styles in the DOM.
+jss.options.insertionPoint = 'jss-insertion-point';
 
 
 const Root = ({ store }) => (
+  <JssProvider jss={jss} generateClassName={generateClassName}>
   <Provider store={store}>
     <Router>
       <Switch>
@@ -26,6 +34,7 @@ const Root = ({ store }) => (
       </Switch>
     </Router>
   </Provider>
+  </JssProvider>
 )
 
 export default Root

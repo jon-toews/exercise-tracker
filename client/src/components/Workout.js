@@ -27,10 +27,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
-
+import Paper from '@material-ui/core/Paper';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const data ={
-  
   lifts: [
     {
       id: 1,
@@ -57,126 +57,320 @@ const data ={
   notes: "Well rested and raring to go.  Running on 9 hours of sleep.  YOLO!"
 }
 
-const Workout = () => {
-  return (
-    <div>
-      <WorkoutCard />
-    </div>  
-  )
-}
-
-// class EditLiftDialog extends Component {
-
-const EditLiftDialog = (props) => (
-  <Dialog
-    open={props.open}
-    aria-labelledby="form-dialog-title"
-  >
-    <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
-    <DialogContent>
-      <DialogContentText>
-        To subscribe to this website, please enter your email address here. We will send
-        updates occasionally.
-      </DialogContentText>
-      <TextField
-        autoFocus
-        margin="dense"
-        id="name"
-        label="Email Address"
-        type="email"
-        fullWidth
-      />
-    </DialogContent>
-    <DialogActions>
-      <Button color="primary" onClick={props.handleClose}>
-        Cancel
-      </Button>
-      <Button color="primary">
-        Subscribe
-      </Button>
-    </DialogActions>
-  </Dialog>
-)
-
-class WorkoutCard extends Component {
-  state = {
-    open: false,
+class Today extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      lifts: [
+        {
+          id: 1,
+          liftType: "Klokov Press",
+          sets: 2,
+          reps: 5,
+          weight: 165,
+        },
+        {
+          id: 2,
+          liftType: "Front Squat",
+          sets: 3,
+          reps: 3,
+          weight: 225,
+        },
+        {
+          id: 3,
+          liftType: "Rows",
+          sets: 5,
+          reps: 5,
+          weight: 185,
+        },
+      ],
+      notes: "Feeling rested and ready to go.  Ready to move some major weight.  Ain't nothin' to it but to do it!",
+      open: false,
+      tempLift: {},
+      selected: [],
+    }
+  }
+  handleClickOpen = (n) => {
+    this.setState({ 
+      open: true,
+      tempLift: n
+    });
   };
 
-  handleClickOpen = () => {
-    this.setState({ open: true });
+  handleAddNew = () => {
+    this.setState({ 
+      open: true,
+      tempLift: {}
+    });
   };
 
-  handleClose = () => {
-    this.setState({ open: false })
+  handleRemove = () => {
+    if (!this.state.selected) return;
+    
+    const newLifts = this.state.lifts.filter(lift => {
+      if (this.state.selected.indexOf(lift.id) === -1) return lift;
+    })
+
+    this.setState({
+      lifts: newLifts,
+    })
   }
 
+  handleClose = () => {
+    this.setState({ 
+      open: false,
+      tempLift: {}
+    })
+  }
+
+  handleSubmit = () => {
+    console.log('submitting', this.state.tempLift)
+    let revised = []
+
+    if (this.state.tempLift.id) {
+      revised = this.state.lifts.map(lift => {
+        if (lift.id === this.state.tempLift.id) {
+          return this.state.tempLift
+        }
+        return lift
+      }, [])
+
+    } else {
+
+      const nextId = this.state.lifts
+        .map(lift => lift.id)
+        .reduce((acc, cur) => {
+          return Math.max(acc, cur)
+        }, [])
+      this.state.tempLift.id = nextId + 1
+
+      revised = [
+        ...this.state.lifts, 
+        this.state.tempLift
+      ]
+    }
+
+    this.setState({
+      lifts: revised,
+      open: false,
+    })
+  }
+
+  handleInputChange = event => {
+    const target = event.target
+    const name = target.name
+    const value = target.value
+
+    this.setState({
+      tempLift: { ...this.state.tempLift, [name]: value, }
+    })
+  }
+
+  handleSelectAllClick = (event, checked) => {
+    console.log(checked)
+    if (checked) {
+      this.setState({ selected: this.state.lifts.map(n => n.id) });
+      return;
+    }
+    this.setState({ selected: [] });
+  };
+
+  handleClick = (event, id) => {
+    const { selected } = this.state;
+    const selectedIndex = selected.indexOf(id);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, id);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1),
+      );
+    }
+
+    this.setState({ selected: newSelected });
+  };
+
+
+
   render() {
-    return(
-      <CssBaseline>
-        <StyledCard>
-  
-          <CardContent>
-            <Typography gutterBottom variant="display1">Wednesday May 5</Typography>
-  
-            <Table style={{marginBottom: 20}}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Lift</TableCell>
-                  <TableCell numeric>Sets</TableCell>
-                  <TableCell numeric>Reps</TableCell>
-                  <TableCell numeric>Weight (lbs)</TableCell>
-                  <EditTableCell></EditTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {data.lifts.map(n => {
-                  return (
-                    <TableRow key={n.id}>
-                      <TableCell component="th" scope="row">
-                        {n.liftType}
-                      </TableCell>
-                      <TableCell numeric>{n.sets}</TableCell>
-                      <TableCell numeric>{n.reps}</TableCell>
-                      <TableCell numeric>{n.weight}</TableCell>
-                      <EditTableCell>
-                        <IconButton color="">
-                          <Icon>edit</Icon>
-                        </IconButton>
-                        </EditTableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-  
-            <Icon color="secondary">star</Icon>
-            <Icon color="secondary">star</Icon>
-            <Icon color="secondary">star</Icon>
-            <Icon>star</Icon>
-            <Icon>star</Icon>
-  
-            <Typography variant="caption" component="p">{data.notes}</Typography>
-  
-          </CardContent>
-  
-          <CardActions>
-            <Button size="small" color="primary" onClick={this.handleClickOpen}>Edit</Button>
-          </CardActions>
-          <EditLiftDialog open={this.state.open} handleClose={this.handleClose}></EditLiftDialog>
-        </StyledCard>
-      </CssBaseline>
+    const { selected, lifts } = this.state
+
+    console.log("selected:", selected)
+
+    return (
+      <Card style={{margin: 20, width: 800}}>
+        <CardContent>
+          <Typography variant="headline">Workout</Typography>
+          <Table >
+            <TableHead>
+              <TableRow>
+              <TableCell colSpan={12} style={{padding: 0}}>
+                <Button color="primary" onClick={this.handleAddNew}>Add</Button>
+                <Button color="primary" onClick={this.handleRemove}>Remove</Button>
+              </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell padding="checkbox">
+                  <Checkbox
+                    indeterminate={selected.length > 0 && selected.length < lifts.length}
+                    checked={selected.length === lifts.length}
+                    onChange={this.handleSelectAllClick}
+                  />
+                </TableCell>
+                <TableCell>Lift</TableCell>
+                <TableCell numeric>Sets</TableCell>
+                <TableCell numeric>Reps</TableCell>
+                <TableCell numeric>Weight (lbs)</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {this.state.lifts.map(n => {
+                const isSelected = this.state.selected.indexOf(n.id) !== -1
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isSelected}
+                    tabIndex={-1}
+                    key={n.id}
+                    selected={isSelected}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={event => this.handleClick(event, n.id)}
+                        checked={isSelected}
+                      />
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {n.liftType}
+                    </TableCell>
+                    <TableCell numeric>{n.sets}</TableCell>
+                    <TableCell numeric>{n.reps}</TableCell>
+                    <TableCell numeric>{n.weight}</TableCell>
+                    <TableCell>
+                      <IconButton 
+                        color="" 
+                        onClick={() => this.handleClickOpen(n)}
+                      >
+                        <Icon>edit</Icon>
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+          <AddLiftDialog 
+            open={this.state.open} 
+            handleInputChange={this.handleInputChange} 
+            handleClose={this.handleClose} 
+            handleSubmit={this.handleSubmit}
+            {...this.state.tempLift}
+          />
+          <br />
+          <Typography component="p" variant="caption">{this.state.notes}</Typography>
+        </CardContent>
+      </Card>
     )
   }
 }
 
-const StyledCard = styled(Card)`
-  max-width: 600px;
-  margin-bottom: 16px;
-`
 
-const EditTableCell = styled(TableCell)`
+const Workout = () => {
+  return (
+    <CssBaseline>
+        <Today />
 
-`
+    </CssBaseline>
+  )
+}
+
+
+
+
+class AddLiftDialog extends Component {
+
+  render() {
+    console.log('dialog:', this.props)
+    return(
+      <Dialog
+        open={this.props.open}
+        onClose={this.props.handleClose}
+        aria-labelledby="form-dialog-title"
+      >
+      <p>{this.props.selected}</p>
+        <DialogTitle id="form-dialog-title">Enter a lift</DialogTitle>
+        <DialogContent>
+          <DialogContentText></DialogContentText>
+          <form>
+            <WideTextField
+              autoFocus
+              margin="dense"
+              name="liftType"
+              label="Lift"
+              type="text"
+              value={this.props.liftType}
+              onChange={this.props.handleInputChange}
+            />
+            <NarrowTextField
+              margin="dense"
+              name="sets"
+              label="Sets"
+              type="number"
+              value={this.props.sets}
+              onChange={this.props.handleInputChange}
+            />
+            <NarrowTextField
+              margin="dense"
+              name="reps"
+              label="Reps"
+              type="number"
+              value={this.props.reps}
+              onChange={this.props.handleInputChange}
+            />
+            <NarrowTextField
+              margin="dense"
+              name="weight"
+              label="Weight"
+              type="number"
+              value={this.props.weight}
+              onChange={this.props.handleInputChange}
+            />
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button color="primary" onClick={this.props.handleClose}>
+            Cancel
+          </Button>
+          <Button color="primary" onClick={this.props.handleSubmit}>
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+    )
+  }
+}
 
 export default Workout
+
+
+const FlexForm = styled.form`
+  display:flex;
+  flex-flow: row wrap;
+`
+
+const NarrowTextField = styled(TextField)`
+  width: 100px;
+  margin-right: 8px;
+`
+const WideTextField = styled(TextField)`
+  flex: 1;
+  margin-right: 8px;
+`
